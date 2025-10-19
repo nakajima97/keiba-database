@@ -10,15 +10,17 @@
 
 - [concept.md](./overview/concept.md) - アプリケーションのコンセプト・目的・ビジョン
 - [database.md](./overview/database.md) - データベース設計書
+- [screens.md](./overview/screens.md) - 画面一覧と各画面の詳細仕様
+- [screen-transition.md](./overview/screen-transition.md) - 画面遷移図とナビゲーション設計
 
 ### domains/ - ドメイン知識に関するドキュメント
 
 - ファイル未作成
 
-### screens/ - 画面仕様に関するドキュメント
+### screens/ - 個別の画面仕様書
 
-- [screen-list.md](./screens/screen-list.md) - 画面一覧と各画面の詳細仕様
-- [screen-transition.md](./screens/screen-transition.md) - 画面遷移図とナビゲーション設計
+- 各画面の詳細な仕様書を格納するディレクトリ
+- ファイル未作成
 
 ## ドキュメントの読み方
 
