@@ -1,7 +1,7 @@
-# 🏇 競馬購入馬券管理DB テーブル設計書（NULL許可対応版）
+# 🏇 競馬購入馬券管理DB テーブル設計書
 
-この設計は「馬券情報中心」で運用可能であり、将来的にレース・出走馬情報を追加できる柔軟な構成です。  
-レース・出走馬関連のカラムはすべて **NULL許可** とし、購入馬券だけの登録も可能としています。
+この設計は「馬券情報中心」で運用可能であり、将来的にレース・出走馬情報を追加できる柔軟な構成です。
+馬券登録時はレースの基本情報（日付・競馬場・レース番号）のみを必須とし、詳細情報は任意で追加可能です。
 
 ---
 
@@ -94,18 +94,21 @@ RACE_HORSES ||--o{ TICKET_DETAILS : "1:N"
 | カラム名 | 型 | NULL | 説明 |
 |-----------|----|------|------|
 | id | INTEGER | NO | レースID（PK） |
-| date | DATE | YES | 開催日 |
-| racecourse | VARCHAR(50) | YES | 競馬場名 |
-| race_number | INTEGER | YES | レース番号 |
-| race_name | VARCHAR(100) | YES | レース名 |
-| grade | VARCHAR(10) | YES | 格付け（G1/G2/G3など） |
-| distance | INTEGER | YES | 距離（m） |
-| surface | VARCHAR(10) | YES | 芝・ダート |
-| direction | VARCHAR(10) | YES | 左回り・右回り |
-| weather | VARCHAR(10) | YES | 天候 |
-| condition | VARCHAR(10) | YES | 馬場状態 |
+| date | DATE | NO | 開催日（必須） |
+| racecourse | VARCHAR(50) | NO | 競馬場名（必須） |
+| race_number | INTEGER | NO | レース番号（必須） |
+| race_name | VARCHAR(100) | YES | レース名（任意） |
+| grade | VARCHAR(10) | YES | 格付け（G1/G2/G3など、任意） |
+| distance | INTEGER | YES | 距離（m、任意） |
+| surface | VARCHAR(10) | YES | 芝・ダート（任意） |
+| direction | VARCHAR(10) | YES | 左回り・右回り（任意） |
+| weather | VARCHAR(10) | YES | 天候（任意） |
+| condition | VARCHAR(10) | YES | 馬場状態（任意） |
 | created_at | DATETIME | NO | 作成日時 |
 | updated_at | DATETIME | NO | 更新日時 |
+
+**制約:**
+- UNIQUE(date, racecourse, race_number) - 同一レースの重複を防止
 
 ---
 
@@ -151,7 +154,7 @@ RACE_HORSES ||--o{ TICKET_DETAILS : "1:N"
 | カラム名 | 型 | NULL | 説明 |
 |-----------|----|------|------|
 | id | INTEGER | NO | 馬券ID（PK） |
-| race_id | INTEGER | YES | races.id（NULL可） |
+| race_id | INTEGER | NO | races.id（必須） |
 | purchase_date | DATETIME | YES | 購入日時 |
 | bet_type | VARCHAR(20) | YES | 馬券種別（単勝・馬連など） |
 | amount | INTEGER | NO | 購入金額 |
@@ -160,6 +163,9 @@ RACE_HORSES ||--o{ TICKET_DETAILS : "1:N"
 | note | TEXT | YES | 備考・メモ |
 | created_at | DATETIME | NO | 作成日時 |
 | updated_at | DATETIME | NO | 更新日時 |
+
+**制約:**
+- FOREIGN KEY(race_id) REFERENCES races(id) - レース情報必須
 
 ---
 
